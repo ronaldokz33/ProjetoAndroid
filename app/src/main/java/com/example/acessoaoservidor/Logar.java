@@ -2,23 +2,19 @@ package com.example.acessoaoservidor;
 
 import android.app.Activity;
 
-import java.util.ArrayList;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import com.example.conexao.clsConexao;
+import com.example.async.LoginRequest;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.*;
 
 public class Logar extends Activity {
-	EditText txtLogin, txtSenha;
+
+    EditText txtLogin, txtSenha;
 	Button btnLogar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -26,37 +22,14 @@ public class Logar extends Activity {
 		txtLogin = (EditText) findViewById(R.id.txtLogin);
 		txtSenha = (EditText) findViewById(R.id.txtSenha);
 		btnLogar = (Button) findViewById(R.id.btnLogar);
-		
-		btnLogar.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Log.i("Logar","Entrou no evento");
-				String url = "http://192.168.0.101:90/Android/logar.php";
-				String urlGet = "http://192.168.0.101:90/Android/logar.php?usuario=" + txtLogin.getText().toString() + "&senha=" + txtSenha.getText().toString();
-				ArrayList<NameValuePair> parametrosPost = new ArrayList<NameValuePair>();
-				parametrosPost.add(new BasicNameValuePair("usuario", txtLogin.toString()));
-				parametrosPost.add(new BasicNameValuePair("senha", txtSenha.toString()));
-				String retorno = null;
-				try{
-					retorno = clsConexao.executaHttpPost(url,parametrosPost);
-					String resposta = retorno;
-					resposta = resposta.replaceAll("\\s+", "");
-					if(resposta.equals(""))
-					{
-						Toast.makeText(Logar.this, "Validado com sucesso!", Toast.LENGTH_LONG).show();
-						setContentView(R.layout.acesso);
-					}
-					else
-						Toast.makeText(Logar.this, "Login e/ou senha inválidos!", Toast.LENGTH_LONG).show();
-				}
-				catch(Exception e){
-					Log.i("Erro","Erro " + e);
-					Toast.makeText(Logar.this, "Erro.:" + e.toString(), Toast.LENGTH_LONG).show();
-				}
-			}
-		});
+
 	}
+
+    public void submit(View v) {
+
+        ((LoginRequest) new LoginRequest(Logar.this, txtLogin.getText().toString(), txtSenha.getText().toString())).execute();
+
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
