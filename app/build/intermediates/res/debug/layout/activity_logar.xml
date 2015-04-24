@@ -31,5 +31,6 @@
 	    android:layout_height="wrap_content"
 	    android:text="Logar"
 	    android:id="@+id/btnLogar"
+        android:onClick="submit"
 	    />
 </LinearLayout><!-- From: file:/C:/workspace/AndroidStudioProjects/AcessoAoServidor1/app/src/main/res/layout/activity_logar.xml -->
